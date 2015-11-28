@@ -5,11 +5,17 @@ To start your Phoenix app:
   1. Install dependencies with `mix deps.get`
   2. Start Phoenix endpoint with `mix phoenix.server`
 
+Now you can visit [`localhost:4000`](http://localhost:4000) from your
+browser.
+
 You can also run your app inside IEx (Interactive Elixir) as:
 
     $ iex -S mix phoenix.server
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+One advantage of running interactively is the ability to inspect the
+application:
+
+    iex(1)> :observer.start()
 
 Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
 

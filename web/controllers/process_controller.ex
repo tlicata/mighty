@@ -10,7 +10,7 @@ defmodule Mighty.ProcessController do
     parent = self()
 
     processes = Enum.map(collection, fn(item) ->
-      spawn_link(fn() ->
+      spawn_link(fn ->
         send(parent, {self(), fun.(item)})
       end)
     end)

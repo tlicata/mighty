@@ -20,6 +20,7 @@ defmodule Mighty.Router do
     get "/hello", HelloController, :index
     get "/hello/:messenger", HelloController, :show
     get "/proc", ProcessController, :index
+    get "/edgar", EdgarController, :index
   end
 
   # Other scopes may use custom stacks.

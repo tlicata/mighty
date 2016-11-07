@@ -9,6 +9,6 @@ defmodule Mighty.HelloController do
     conn
     |> put_flash(:info, "Success message")
     |> put_flash(:error, "Error message")
-    |> render "show.html", messenger: messenger
+    |> render("show.html", messenger: messenger)
   end
 end

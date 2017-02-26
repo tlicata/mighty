@@ -19,6 +19,11 @@ application:
 
 Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
 
+
+Run the tests with:
+
+    mix test
+
 ## Learn more
 
   * Official website: http://www.phoenixframework.org/

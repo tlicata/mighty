@@ -19,7 +19,7 @@ defmodule Mighty.EdgarController do
   end
 
   def fetch_year(year) do
-    pid = connect
+    pid = connect()
     fetch_year(pid, year)
     disconnect(pid)
   end
@@ -31,7 +31,7 @@ defmodule Mighty.EdgarController do
   end
 
   def fetch_quarter(year, quarter) do
-    pid = connect
+    pid = connect()
     fetch_quarter(pid, year, quarter)
     disconnect(pid)
   end
@@ -42,7 +42,7 @@ defmodule Mighty.EdgarController do
   end
 
   def fetch_file(fullpath) do
-    pid = connect
+    pid = connect()
     fetch_file(pid, fullpath)
     disconnect(pid)
   end

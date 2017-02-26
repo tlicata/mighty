@@ -20,7 +20,7 @@ application:
 Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
 
 
-Run the tests with:
+You can run the tests with:
 
     mix test
 

@@ -32,6 +32,7 @@ defmodule Mighty.Mixfile do
      {:phoenix_html, "~> 2.1"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:cowboy, "~> 1.0"},
-     {:httpoison, "~> 0.11.1"}]
+     {:httpoison, "~> 0.11.1"},
+     {:poison, "~> 2.0"}]
   end
 end

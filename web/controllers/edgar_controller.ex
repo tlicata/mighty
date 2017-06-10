@@ -50,7 +50,7 @@ defmodule Mighty.EdgarController do
   def filter_by_type(entries, type) do
     Enum.filter(entries, &String.match?(&1, ~r/#{type}/))
   end
-  def ftp_file_path(entry) do
+  def file_path(entry) do
     List.last String.split(entry, "|")
   end
 

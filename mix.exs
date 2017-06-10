@@ -17,7 +17,7 @@ defmodule Mighty.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Mighty, []},
-     applications: [:phoenix, :phoenix_html, :cowboy, :logger]]
+     applications: [:phoenix, :phoenix_html, :cowboy, :logger, :httpoison]]
   end
 
   # Specifies which paths to compile per environment.
@@ -31,6 +31,8 @@ defmodule Mighty.Mixfile do
     [{:phoenix, "~> 1.2"},
      {:phoenix_html, "~> 2.1"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:httpoison, "~> 0.11.1"},
+     {:poison, "~> 2.0"}]
   end
 end

@@ -3,54 +3,37 @@ require IEx;
 defmodule Mighty.EdgarController do
   use Mighty.Web, :controller
 
+  @edgar_url "https://www.sec.gov/Archives"
+
   def index(conn, _params) do
     render conn, "index.html"
   end
 
-  def connect() do
-    {:ok, pid} = :inets.start(:ftpc, host: 'ftp.sec.gov')
-    :ftp.user(pid, 'anonymous', '')
-    pid
-  end
-
-  def disconnect(pid) do
-    :ftp.close(pid)
-    :inets.stop(:ftpc, pid)
-  end
-
   def fetch_year(year) do
-    pid = connect()
-    fetch_year(pid, year)
-    disconnect(pid)
-  end
-  def fetch_year(pid, year) do
-    :ok = :ftp.cd(pid, '/edgar/full-index/#{year}')
-    {:ok, quarters} = :ftp.nlist(pid)
-    quarter_list = String.split to_string(quarters)
-    Enum.map(quarter_list, &fetch_quarter(pid, year, &1))
+    %HTTPoison.Response{status_code: 200, body: body} =
+      HTTPoison.get! "#{@edgar_url}/edgar/full-index/#{year}/index.json"
+
+    %{"directory" => %{"item" => items}} = Poison.decode!(body)
+    quarters = for %{"name" => qtr} <- items, do: qtr
+    Enum.map(quarters, &fetch_quarter(year, &1))
   end
 
   def fetch_quarter(year, quarter) do
-    pid = connect()
-    fetch_quarter(pid, year, quarter)
-    disconnect(pid)
-  end
-  def fetch_quarter(pid, year, quarter) do
     IO.puts("fetch_quarter #{year}, #{quarter}")
-    :ok = :ftp.cd(pid, '/edgar/full-index/#{year}/#{quarter}')
-    :ok = :ftp.recv(pid, 'master.idx', '#{year}-#{quarter}-master.idx')
+
+    %HTTPoison.Response{status_code: 200, body: body} =
+      HTTPoison.get! "#{@edgar_url}/edgar/full-index/#{year}/#{quarter}/master.idx"
+
+    File.write("#{year}-#{quarter}-master.idx", body)
   end
 
   def fetch_file(fullpath) do
-    pid = connect()
-    fetch_file(pid, fullpath)
-    disconnect(pid)
-  end
-  def fetch_file(pid, fullpath) do
+    %HTTPoison.Response{status_code: 200, body: body} =
+      HTTPoison.get! "#{@edgar_url}/#{fullpath}"
+
     File.mkdir_p!(Path.dirname(fullpath))
-    path = to_char_list fullpath
-    :ok = :ftp.cd(pid, '/')
-    :ok = :ftp.recv(pid, path, path)
+
+    File.write(fullpath, body)
   end
 
   def index_entries(company) do
@@ -61,13 +44,13 @@ defmodule Mighty.EdgarController do
   end
   def index_entries(company, files) do
     {lines, 0} = System.cmd("find", [".", "-name", files, "-exec", "grep", "-i", company, "{}", "\;"])
-    String.split(lines, "\r\n")
+    String.split(lines, "\n")
   end
 
   def filter_by_type(entries, type) do
     Enum.filter(entries, &String.match?(&1, ~r/#{type}/))
   end
-  def ftp_file_path(entry) do
+  def file_path(entry) do
     List.last String.split(entry, "|")
   end
 

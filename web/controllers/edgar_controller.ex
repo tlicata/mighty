@@ -44,7 +44,7 @@ defmodule Mighty.EdgarController do
   end
   def index_entries(company, files) do
     {lines, 0} = System.cmd("find", [".", "-name", files, "-exec", "grep", "-i", company, "{}", "\;"])
-    String.split(lines, "\r\n")
+    String.split(lines, "\n")
   end
 
   def filter_by_type(entries, type) do

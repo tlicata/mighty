@@ -15,16 +15,19 @@ defmodule Mighty.EdgarController do
 
     %{"directory" => %{"item" => items}} = Poison.decode!(body)
     quarters = for %{"name" => qtr} <- items, do: qtr
-    Enum.map(quarters, &fetch_quarter(year, &1))
+    Enum.map(quarters, fn(qtr) ->
+      spawn(&fetch_quarter(year, qtr))
+    end)
   end
 
   def fetch_quarter(year, quarter) do
-    IO.puts("fetch_quarter #{year}, #{quarter}")
+    IO.puts("fetch_quarter #{year}, #{quarter}...")
 
     %HTTPoison.Response{status_code: 200, body: body} =
       HTTPoison.get! "#{@edgar_url}/edgar/full-index/#{year}/#{quarter}/master.idx"
 
     File.write("#{year}-#{quarter}-master.idx", body)
+    IO.puts("fetch_quarter #{year}, #{quarter} finished.")
   end
 
   def fetch_file(fullpath) do

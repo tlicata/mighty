@@ -16,7 +16,7 @@ defmodule Mighty.EdgarController do
     %{"directory" => %{"item" => items}} = Poison.decode!(body)
     quarters = for %{"name" => qtr} <- items, do: qtr
     Enum.map(quarters, fn(qtr) ->
-      spawn(&fetch_quarter(year, qtr))
+      spawn fn -> fetch_quarter(year, qtr) end
     end)
   end
 
